@@ -1,0 +1,7 @@
+{
+  "name": "teleparty-websocket-lib",
+  "version": "1.0.4",
+  "main": "index.js",
+  "type": "commonjs",
+  "license": "MIT"
+}

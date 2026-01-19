@@ -12,7 +12,7 @@ export default defineConfig({
   },
   build: {
     commonjsOptions: {
-      include: [/teleparty-websocket-lib/, /node_modules/],
+      include: [/teleparty-websocket-lib/, /lib/, /node_modules/],
       transformMixedEsModules: true,
       strictRequires: true,
     },

@@ -38,8 +38,7 @@ A React + TypeScript application that integrates with the Teleparty chat SDK to 
 
 ### Prerequisites
 - Node.js 18 or higher
-- The `teleparty-websocket-lib` will be installed from GitHub automatically
-- For local development with a sibling directory, you can use `npm link` or modify `package.json` to use `file:../teleparty-websocket-lib`
+- The `teleparty-websocket-lib` is included in the `lib/` directory (MIT licensed)
 
 ### Installation
 ```bash
