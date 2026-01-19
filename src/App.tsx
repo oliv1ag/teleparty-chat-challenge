@@ -9,6 +9,8 @@ function App() {
     messages,
     anyoneTyping,
     error,
+    nickname,
+    userIcon,
     createRoom,
     joinRoom,
     sendChatMessage,
@@ -30,6 +32,8 @@ function App() {
           roomId={roomId}
           messages={messages}
           anyoneTyping={anyoneTyping}
+          currentUserNickname={nickname}
+          currentUserIcon={userIcon}
           onSendMessage={sendChatMessage}
           onSetTyping={setTyping}
         />

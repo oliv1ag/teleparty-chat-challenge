@@ -17,6 +17,7 @@ export function useTelepartyChat() {
   const [anyoneTyping, setAnyoneTyping] = useState(false)
   const [roomId, setRoomId] = useState<string | null>(null)
   const [nickname, setNickname] = useState<string | null>(null)
+  const [userIcon, setUserIcon] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -66,6 +67,7 @@ export function useTelepartyChat() {
       setMessages([])
       setRoomId(id)
       setNickname(nick)
+      setUserIcon(userIcon || null)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to create room')
     }
@@ -88,6 +90,7 @@ export function useTelepartyChat() {
       setMessages(messageList.messages ?? [])
       setRoomId(id)
       setNickname(nick)
+      setUserIcon(userIcon || null)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to join room')
     }
@@ -111,6 +114,7 @@ export function useTelepartyChat() {
     anyoneTyping,
     roomId,
     nickname,
+    userIcon,
     error,
     createRoom,
     joinRoom,

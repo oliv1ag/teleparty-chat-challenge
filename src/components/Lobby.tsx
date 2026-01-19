@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 type ConnectionStatus = 'connecting' | 'ready' | 'closed'
 
@@ -20,16 +20,49 @@ export function Lobby({
   const [nickname, setNickname] = useState('')
   const [inputRoomId, setInputRoomId] = useState('')
   const [mode, setMode] = useState<'create' | 'join'>('create')
+  const [userIcon, setUserIcon] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const isReady = connectionStatus === 'ready'
   const hasRoomId = roomId !== null
   const isDisabled = !isReady || hasRoomId
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) {
+      setUserIcon(null)
+      return
+    }
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string
+      setUserIcon(dataUrl)
+    }
+    reader.onerror = () => {
+      alert('Error reading file')
+      setUserIcon(null)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleRemoveIcon = () => {
+    setUserIcon(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault()
     const trimmedNickname = nickname.trim()
     if (!trimmedNickname) return
-    createRoom(trimmedNickname)
+    createRoom(trimmedNickname, userIcon || undefined)
   }
 
   const handleJoin = (e: React.FormEvent) => {
@@ -37,7 +70,7 @@ export function Lobby({
     const trimmedNickname = nickname.trim()
     const trimmedRoomId = inputRoomId.trim()
     if (!trimmedNickname || !trimmedRoomId) return
-    joinRoom(trimmedNickname, trimmedRoomId)
+    joinRoom(trimmedNickname, trimmedRoomId, userIcon || undefined)
   }
 
   return (
@@ -119,6 +152,50 @@ export function Lobby({
             />
           </div>
         )}
+
+        <div style={{ marginBottom: '12px' }}>
+          <label htmlFor="userIcon" style={{ display: 'block', marginBottom: '4px' }}>
+            User Icon (Optional)
+          </label>
+          <input
+            ref={fileInputRef}
+            id="userIcon"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            disabled={isDisabled}
+            style={{
+              width: '100%',
+              padding: '8px',
+              boxSizing: 'border-box',
+            }}
+          />
+          {userIcon && (
+            <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <img
+                src={userIcon}
+                alt="User icon preview"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleRemoveIcon}
+                style={{
+                  padding: '4px 8px',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          )}
+        </div>
 
         <button
           type="submit"

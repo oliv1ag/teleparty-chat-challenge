@@ -5,11 +5,13 @@ type ChatRoomProps = {
   roomId: string
   messages: SessionChatMessage[]
   anyoneTyping: boolean
+  currentUserNickname: string | null
+  currentUserIcon: string | null
   onSendMessage: (body: string) => void
   onSetTyping: (typing: boolean) => void
 }
 
-export function ChatRoom({ roomId, messages, anyoneTyping, onSendMessage, onSetTyping }: ChatRoomProps) {
+export function ChatRoom({ roomId, messages, anyoneTyping, currentUserNickname, currentUserIcon, onSendMessage, onSetTyping }: ChatRoomProps) {
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {
@@ -48,16 +50,65 @@ export function ChatRoom({ roomId, messages, anyoneTyping, onSendMessage, onSetT
                   color: message.isSystemMessage ? '#666' : '#000',
                 }}
               >
-                {message.isSystemMessage ? (
-                  <>
-                    {message.userNickname && <strong>{message.userNickname} </strong>}
-                    {message.body}
-                  </>
-                ) : (
-                  <>
-                    <strong>{message.userNickname || 'Unknown'}:</strong> {message.body}
-                  </>
-                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {(() => {
+                    const iconToShow = message.userIcon || 
+                      (message.userNickname === currentUserNickname ? currentUserIcon : null)
+                    return (
+                      <div
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '50%',
+                          flexShrink: 0,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: iconToShow ? 'transparent' : '#ccc',
+                          color: '#666',
+                          fontSize: '12px',
+                          fontWeight: 'bold',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {iconToShow ? (
+                          <img
+                            src={iconToShow}
+                            alt={message.userNickname || 'User'}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                            }}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              target.style.display = 'none'
+                              const parent = target.parentElement
+                              if (parent) {
+                                parent.textContent = (message.userNickname || 'U')[0].toUpperCase()
+                                parent.style.backgroundColor = '#ccc'
+                              }
+                            }}
+                          />
+                        ) : (
+                          <span>{(message.userNickname || 'U')[0].toUpperCase()}</span>
+                        )}
+                      </div>
+                    )
+                  })()}
+                  <div>
+                    {message.isSystemMessage ? (
+                      <>
+                        {message.userNickname && <strong>{message.userNickname} </strong>}
+                        {message.body}
+                      </>
+                    ) : (
+                      <>
+                        <strong>{message.userNickname || 'Unknown'}:</strong> {message.body}
+                      </>
+                    )}
+                  </div>
+                </div>
               </li>
             ))}
           </ul>
