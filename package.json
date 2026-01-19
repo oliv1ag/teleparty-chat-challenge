@@ -11,7 +11,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "teleparty-websocket-lib": "github:watchparty-org/teleparty-websocket-lib"
+    "teleparty-websocket-lib": "https://github.com/MCElmo/teleparty-websocket-lib.git"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
