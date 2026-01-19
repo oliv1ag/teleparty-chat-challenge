@@ -98,7 +98,35 @@ src/
 └── index.css                   # Global styles
 ```
 
+## Deployment
+
+### GitHub Pages
+
+The app is configured for automatic deployment to GitHub Pages via GitHub Actions.
+
+**Prerequisites:**
+- The `teleparty-websocket-lib` must be available as a sibling repository in your GitHub account
+- If the library is in a different location, update the workflow file (`.github/workflows/deploy.yml`) accordingly
+
+**Setup Steps:**
+
+1. **Enable GitHub Pages**:
+   - Go to your repository Settings → Pages
+   - Set Source to "GitHub Actions"
+
+2. **Automatic Deployment**:
+   - The workflow (`.github/workflows/deploy.yml`) will automatically build and deploy on every push to `main`
+   - The app will be available at: `https://[username].github.io/teleparty-chat-challenge/`
+
+3. **Manual Deployment**:
+   - You can also trigger deployment manually via the "Actions" tab → "Deploy to GitHub Pages" → "Run workflow"
+
+**Note:** If the `teleparty-websocket-lib` is not available as a sibling repo, you may need to:
+- Copy the library files into this repository, or
+- Update the workflow to checkout the library from a different location
+
 ## Notes
 - UI styling is minimal and functional
 - Reconnection logic is not implemented (reload page on connection close)
 - The app waits for connection to be ready before allowing create/join operations
+- User icon upload is supported (optional feature)
