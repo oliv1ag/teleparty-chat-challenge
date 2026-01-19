@@ -6,11 +6,15 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: ['teleparty-websocket-lib'],
+    esbuildOptions: {
+      target: 'es2020',
+    },
   },
   build: {
     commonjsOptions: {
       include: [/teleparty-websocket-lib/, /node_modules/],
       transformMixedEsModules: true,
+      strictRequires: true,
     },
   },
 })
